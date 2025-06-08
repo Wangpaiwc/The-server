@@ -123,7 +123,7 @@ void TCPServer::startAccept()
                     io_context_, std::move(socket));
                
                 // ÉèÖÃ»Øµ÷
-                conn->setReceiveCallback([&conn](const std::string& data) {
+                conn->setReceiveCallback([conn](const std::string& data) {
           
                     ThreadPool& t = ThreadPool::instance();
 
