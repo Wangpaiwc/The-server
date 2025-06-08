@@ -2,6 +2,7 @@
 #include "mysql.h"
 #include <boost/asio/io_context.hpp>
 #include <boost/thread.hpp>
+#include <boost/asio/post.hpp>
 
 class ThreadPool {
 public:

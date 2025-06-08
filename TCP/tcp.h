@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <string>
 #include <functional>
+#include "plant.h"
 
 using boost::asio::ip::tcp;
 
@@ -40,6 +41,12 @@ public:
     // 检查连接是否活跃
     bool isConnected() const;
 
+    My_Moo::plant p;
+
+    boost::asio::io_context& get_io_context()
+    {
+        return io_context_;
+    }
 private:
     // 异步读取操作
     void doRead();
@@ -62,6 +69,8 @@ private:
     ErrorCallback error_callback_;
 
     bool connected_ = false;
+
+    
 };
 
 class TCPServer {

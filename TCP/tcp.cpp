@@ -1,5 +1,7 @@
 #include "tcp.h"
 #include <iostream>
+#include "thread_pool.h"
+#include <boost/asio/post.hpp>
 
 TCPConnection::TCPConnection(boost::asio::io_context& io_context)
     : io_context_(io_context), socket_(io_context) {
@@ -119,10 +121,26 @@ void TCPServer::startAccept()
                 // 创建新连接
                 auto conn = std::make_shared<TCPConnection>(
                     io_context_, std::move(socket));
-
+               
                 // 设置回调
-                conn->setReceiveCallback([](const std::string& data) {
-                    std::cout << "Received: " << data << std::endl;
+                conn->setReceiveCallback([&conn](const std::string& data) {
+          
+                    ThreadPool& t = ThreadPool::instance();
+
+                    t.submit([conn,data = std::string(data)]() {
+
+                            bool response = conn->p.pmoo->run(data);
+
+                            if (response && conn->isConnected())
+                            {
+
+                                boost::asio::post(conn->get_io_context(),
+                                    [conn]() {
+                                        conn->send(conn->p.pmoo->str);
+                                        conn->p.pmoo->str.clear();
+                                    });
+                            }
+                        }); 
                     });
 
                 conn->setErrorCallback([](const boost::system::error_code& ec) {

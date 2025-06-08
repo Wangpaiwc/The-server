@@ -34,13 +34,10 @@ public:
         const std::string& username2,
         const std::string& relation_type);
 
-    // 查询用户是否存在（验证账号密码）
     bool checkUserCredentials(const std::string& username, const std::string& password);
 
-    // 查询指定用户的所有关联关系
     std::vector<Yu> getUserRelationsByUsername(const std::string& username);
 
-   
 private:
     mysqlx::Session* session;
 };
@@ -79,5 +76,7 @@ private:
         database = "list";
 
         thread_number = 2;
+
+        return true;
     }
 };

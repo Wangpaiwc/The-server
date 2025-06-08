@@ -34,20 +34,14 @@ int main_1()
     std::string database = "list";
 
     MySQLConnector m;
-    if (m.connect(host, port, user, password, database))
-    {
-     
-        if (m.checkUserCredentials("one", "one"))
-        {
-            auto s = m.getUserRelationsByUsername("one");
+    
+    auto s = m.getUserRelationsByUsername("one");
 
-            for (auto &i : s)
-            {
-                std::cout << i.user << " " << i.contend;
-            }
-        }
-       
+    for (auto &i : s)
+    {
+        std::cout << i.user << " " << i.contend;
     }
+       
 
     return 0;
 }
