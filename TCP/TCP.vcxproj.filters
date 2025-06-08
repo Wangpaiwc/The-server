@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\Tcp_connect">
+      <UniqueIdentifier>{0fded182-e86d-4342-ab8e-a70eb8b688cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tco_connect">
+      <UniqueIdentifier>{d6e57d15-0754-4b9d-bcfc-2fa5b7150794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\moo">
+      <UniqueIdentifier>{ab22fef1-ebcd-4090-b72c-b180d5813773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\moo">
+      <UniqueIdentifier>{43d1c307-399c-485e-aea5-45d8ebfaafcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tool">
+      <UniqueIdentifier>{7b065ce7-0dcd-4786-b36d-081323e0cdc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tool\mysql">
+      <UniqueIdentifier>{c4ab706d-bff7-4610-8c0a-6371cbdc3f58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\tool">
+      <UniqueIdentifier>{bd3af1e8-1097-4acc-b5bf-9b89d5d44e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\tool\mysql">
+      <UniqueIdentifier>{95c7df7b-70cb-40b6-bb59-caf22b3bdb70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tool\thread_pool">
+      <UniqueIdentifier>{89e0b332-dc34-4bc9-92ac-12926b883087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\tool\thread_pool">
+      <UniqueIdentifier>{bcc51ced-0362-468f-8bc8-83143bdce876}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tcp.cpp">
+      <Filter>源文件\Tcp_connect</Filter>
+    </ClCompile>
+    <ClCompile Include="moo.cpp">
+      <Filter>源文件\moo</Filter>
+    </ClCompile>
+    <ClCompile Include="plant.cpp">
+      <Filter>源文件\moo</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql.cpp">
+      <Filter>源文件\tool\mysql</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_pool.cpp">
+      <Filter>源文件\tool\thread_pool</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tcp.h">
+      <Filter>头文件\Tco_connect</Filter>
+    </ClInclude>
+    <ClInclude Include="moo.h">
+      <Filter>头文件\moo</Filter>
+    </ClInclude>
+    <ClInclude Include="plant.h">
+      <Filter>头文件\moo</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql.h">
+      <Filter>头文件\tool\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_pool.h">
+      <Filter>头文件\tool\thread_pool</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
