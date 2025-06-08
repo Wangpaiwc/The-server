@@ -5,18 +5,19 @@
 
 namespace My_Moo
 {
-	class plant
+	class Plant
 	{
 	public:
-		plant();
+		static Plant& instance();
 
-		virtual My_Moo::handle_one* get_Moo(int mark);
-
-		My_Moo::Moo* pmoo;
+		virtual std::string get_Moo(const std::string &s);
 
 	private:
+		Plant();
+
+		~Plant();
+
 		std::vector< My_Moo::handle_one*> moos;
 
-		
 	};
 }

@@ -119,6 +119,8 @@ bool MySQLConnector::checkUserCredentials(const std::string& username, const std
     }
 
     try {
+
+        boost::mutex::scoped_lock lock(g_mutex);
         mysqlx::RowResult result = session->sql("SELECT id FROM users WHERE username = ? AND password = ?")
             .bind(username, password)
             .execute();

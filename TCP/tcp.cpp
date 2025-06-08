@@ -2,6 +2,10 @@
 #include <iostream>
 #include "thread_pool.h"
 #include <boost/asio/post.hpp>
+#include "plant.h"
+#include <boost/asio.hpp>              
+#include <boost/asio/post.hpp>         
+#include <memory>            
 
 TCPConnection::TCPConnection(boost::asio::io_context& io_context)
     : io_context_(io_context), socket_(io_context) {
@@ -28,12 +32,16 @@ void TCPConnection::connect(const std::string& host, const std::string& port) {
 }
 
 void TCPConnection::send(const std::string& message) {
-    bool write_in_progress = !write_buffer_.empty();
-    write_buffer_ += message;
+    
+    boost::asio::post(io_context_, [this, message]() {
+        bool write_in_progress = !write_buffer_.empty();
+        write_buffer_ += message;
 
-    if (!write_in_progress) {
-        doWrite();
-    }
+        if (!write_in_progress) {
+            doWrite();
+        }
+        });
+   
 }
 
 void TCPConnection::startReceiving() {
@@ -74,6 +82,7 @@ void TCPConnection::doWrite() {
             handleWrite(error, bytes_transferred);
         });
 }
+
 
 void TCPConnection::handleRead(const boost::system::error_code& error, size_t bytes_transferred) {
     if (!error) {
@@ -118,43 +127,37 @@ void TCPServer::startAccept()
         [this](boost::system::error_code ec, tcp::socket socket)
         {
             if (!ec) {
-                // 创建新连接
                 auto conn = std::make_shared<TCPConnection>(
                     io_context_, std::move(socket));
                
-                // 设置回调
-                conn->setReceiveCallback([&conn](const std::string& data) {
-          
-                    ThreadPool& t = ThreadPool::instance();
+             
+                conn->setReceiveCallback([weak_conn = std::weak_ptr<TCPConnection>(conn)](std::string data) {  
+                    ThreadPool& t = ThreadPool::instance();  
 
-                    t.submit([conn,data = std::string(data)]() {
-
-                            bool response = conn->p.pmoo->run(data);
-
-                            if (response && conn->isConnected())
-                            {
-
-                                boost::asio::post(conn->get_io_context(),
-                                    [conn]() {
-                                        conn->send(conn->p.pmoo->str);
-                                        conn->p.pmoo->str.clear();
-                                    });
-                            }
-                        }); 
-                    });
+                    t.submit([weak_conn, data_run=std::move(data)]() {
+                        if (auto conn = weak_conn.lock()) {  
+                            My_Moo::Plant& p = My_Moo::Plant::instance();  
+                            std::string mid = p.get_Moo(data_run);  
+                            
+                            conn->send(mid);
+                            
+                        }  
+                    });  
+                });
+                
 
                 conn->setErrorCallback([](const boost::system::error_code& ec) {
                     std::cerr << "Error: " << ec.message() << std::endl;
                     });
 
-                // 开始接收数据
+        
                 conn->startReceiving();
 
-                // 存储连接
+   
                 connections_.push_back(conn);
             }
 
-            // 继续接受新连接
+
             startAccept();
         });
 }

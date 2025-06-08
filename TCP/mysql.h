@@ -2,6 +2,7 @@
 
 #include <mysqlx/xdevapi.h>
 #include <string>
+#include <boost/thread/mutex.hpp>
 
 class Yu
 {
@@ -20,16 +21,12 @@ public:
     MySQLConnector();
     ~MySQLConnector();
 
-    // 连接MySQL数据库
     bool connect();
 
-    // 创建用户表
     bool createUserTable();
 
-    // 插入用户数据
     bool insertUser(const std::string& username, const std::string& password);
 
-    // 插入关联数据（使用用户名而非ID）
     bool insertRelation(const std::string& username1,
         const std::string& username2,
         const std::string& relation_type);
@@ -40,6 +37,8 @@ public:
 
 private:
     mysqlx::Session* session;
+
+    boost::mutex g_mutex;
 };
 
 class ConfigManager
@@ -52,10 +51,13 @@ public:
     std::string database;
     int thread_number;
 
+    MySQLConnector* mysql;
+    
+
     static ConfigManager& instance()
     {
         static ConfigManager cm;
-
+       
         return cm;
     }
 
@@ -65,6 +67,8 @@ private:
     ConfigManager()
     {
         read();
+
+        mysql = new MySQLConnector();
     }
 
     bool read()

@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <string>
+#include "mysql.h"
 
 namespace My_Moo
 {
@@ -9,7 +10,7 @@ namespace My_Moo
 	public:
 		Moo();
 		
-		~Moo();
+		virtual ~Moo();
 
 		virtual bool run(const std::string& data);
 
@@ -28,14 +29,20 @@ namespace My_Moo
 	public:
 		handle_one(int mark) :mark(mark)
 		{
-
+			config = &ConfigManager::instance();
 		}
+
+		~handle_one() = default;
 
 		bool str_map(std::string& data, std::map<std::string, std::string>& result);
 
-		virtual bool handle_str(std::string& data);
+		virtual std::string handle_str(std::string& data);
+
+		virtual bool handle_str_tool(std::map<std::string, std::string>& result);
 	protected:
 		int mark;
+
+		ConfigManager* config;
 	};
 
 

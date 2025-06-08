@@ -45,29 +45,27 @@ bool My_Moo::Moo::run(const std::string& data) {
 
     size_t pos = 0;
     const size_t buffer_size = buffer.size();
-    bool processed = false; // 是否成功处理过数据
+    bool processed = false; 
 
     while (pos + 10 <= buffer_size) {
-        // 检查是否有足够字节读取 flag + length
+  
         if (pos + 8 > buffer_size) break;
 
-        // 读取 flag 和 declared_len（网络字节序转换）
+
         uint32_t flag = ntohl(*reinterpret_cast<const uint32_t*>(buffer.data() + pos));
         uint32_t declared_len = ntohl(*reinterpret_cast<const uint32_t*>(buffer.data() + pos + 4));
 
-        // 检查长度有效性
+
         if (declared_len > MAX_PACKET_SIZE) {
             buffer.clear();
             return false;
         }
 
-        // 计算完整块长度 (flag + len + content + '#')
+
         const size_t chunk_len = 8 + declared_len + 1;
         if (pos + chunk_len > buffer_size) break;
 
-        // 检查分隔符 '#' 是否匹配
         if (buffer[pos + chunk_len - 1] != '#') {
-            // 快速查找下一个 '#' 的位置
             const size_t next_delim = buffer.find('#', pos);
             if (next_delim == std::string::npos) {
                 buffer.clear();
@@ -77,20 +75,18 @@ bool My_Moo::Moo::run(const std::string& data) {
             continue;
         }
 
-        // 提取内容（避免拷贝，直接传递指针和长度）
         std::string chunk = buffer.substr(pos + 8, declared_len);
-        run_tool(flag, std::string(chunk)); // 如果 run_tool 需要 std::string
+        run_tool(flag, std::string(chunk)); 
 
         processed = true;
         pos += chunk_len;
     }
 
-    // 移除已处理的数据
     if (pos > 0) {
         buffer.erase(0, pos);
     }
 
-    return processed; // 返回是否处理了有效数据
+    return processed; 
 }
 
 bool My_Moo::Moo::run_tool(int mark,const std::string& data)
@@ -125,18 +121,39 @@ bool My_Moo::handle_one::str_map(std::string& data, std::map<std::string, std::s
     return mark;
 }
 
-bool My_Moo::handle_one::handle_str(std::string& data)
+std::string My_Moo::handle_one::handle_str(std::string& data)
 {
     std::map<std::string, std::string> result;
 
     bool re = true;
     if (str_map(data, result))
     {
-
+        re = handle_str_tool(result);
     }
     else
     {
         re = false;
     }
-    return re;
+
+    if (re)
+    {
+        return "true";
+    }
+    else
+    {
+        return "false";
+    }
+}
+
+bool My_Moo::handle_one::handle_str_tool(std::map<std::string, std::string>& result)
+{
+    auto user = result.find("user");
+    auto password = result.find("password");
+
+    if (user != result.end() && password != result.end())
+    {
+        return config->mysql->checkUserCredentials(user->second, password->second);
+    }
+
+    return false;
 }
